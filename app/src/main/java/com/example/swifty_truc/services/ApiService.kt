@@ -1,16 +1,24 @@
+package com.example.swifty_truc.services
+
+import UserDTO
 import com.google.gson.Gson
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import android.util.Base64
 import android.util.Log
-import okhttp3.logging.HttpLoggingInterceptor
+import com.example.swifty_truc.dTO.AuthResponse
+import com.example.swifty_truc.dTO.EventDTO
+import com.example.swifty_truc.dTO.EventsDTO
 
 class ApiService(private val client: OkHttpClient) {
 
+    private var token: String = ""
+
     suspend fun fetchAuthToken(): AuthResponse {
         val clientId = "u-s4t2ud-fc28b4a661a126ce7936bc7147395db5a2038f184c771450a417ee8c256e2094"
-        val clientSecret = "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"
+        val clientSecret =
+            "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"
 
         val credentials = "$clientId:$clientSecret"
         val encodedCredentials = Base64.encodeToString(credentials.toByteArray(), Base64.NO_WRAP)
@@ -24,13 +32,24 @@ class ApiService(private val client: OkHttpClient) {
             .post(requestBody)
             .addHeader("Authorization", "Basic $encodedCredentials")
             .build()
+        val t: AuthResponse = makeRequest(request)
+        token = t.accessToken
+
+        return t
+    }
+
+    suspend fun fetchUserData(): UserDTO {
+        val request = Request.Builder()
+            .url("https://api.intra.42.fr/v2/users/hutricot")
+            .header("Authorization", "Bearer $token")
+            .build()
 
         return makeRequest(request)
     }
 
-    suspend fun fetchUserData(token: String): UserDataResponse {
+    suspend fun fetchEventsUserData(): EventsDTO {
         val request = Request.Builder()
-            .url("https://api.example.com/user/data")
+            .url("https://api.intra.42.fr/v2/users/37164/events")
             .header("Authorization", "Bearer $token")
             .build()
 
@@ -52,10 +71,12 @@ class ApiService(private val client: OkHttpClient) {
 
     private suspend inline fun <reified T> makeRequest(request: Request): T {
         val response = client.newCall(request).execute()
+        val responseBody = response.body?.string()
+        if (responseBody != null) {
+            Log.d("response", responseBody)
+        }
         if (response.isSuccessful) {
-            val responseBody = response.body?.string()
             if (responseBody != null) {
-                Log.d("makeRequest", "Réponse brute : $responseBody")
                 return Gson().fromJson(responseBody, T::class.java)
             } else {
                 throw Exception("Le corps de la réponse est vide")
