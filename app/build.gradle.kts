@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+    implementation (libs.androidx.foundation)
+    implementation (libs.ui)
+    implementation(libs.coil.compose)
     implementation(libs.logging.interceptor)
     implementation(libs.okhttp)
     implementation (libs.retrofit)

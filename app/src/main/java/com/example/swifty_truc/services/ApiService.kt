@@ -75,13 +75,6 @@ class ApiService(private val client: OkHttpClient) {
         val response = client.newCall(request).execute()
         val responseBody = response.body?.string()
 
-        if (responseBody != null) {
-            val chunkSize = 4000  // Taille des morceaux pour le log
-            for (i in 0..responseBody.length step chunkSize) {
-                Log.d("response_raw", responseBody.substring(i, minOf(i + chunkSize, responseBody.length)))
-            }
-        }
-
         if (response.isSuccessful) {
             if (responseBody != null) {
                 try {
