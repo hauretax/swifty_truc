@@ -1,6 +1,7 @@
 package com.example.swifty_truc.services
 
 import UserDTO
+import android.content.Context
 import android.media.metrics.Event
 import com.google.gson.Gson
 import okhttp3.FormBody
@@ -11,7 +12,9 @@ import android.util.Log
 import com.example.swifty_truc.dTO.AuthResponse
 import com.example.swifty_truc.dTO.EventDTO
 import com.example.swifty_truc.dTO.EventsDTO
+import com.example.swifty_truc.dTO.ExpertiseDTO
 import com.google.gson.reflect.TypeToken
+import androidx.core.content.edit
 
 class ApiService(private val client: OkHttpClient) {
 
@@ -47,6 +50,23 @@ class ApiService(private val client: OkHttpClient) {
             .build()
 
         return makeRequest(request)
+    }
+
+     /*
+     * update local expertise_list after fetch it on api
+     * */
+    suspend fun fetchExpertiseList(context: Context) {
+        val request = Request.Builder()
+            .url("https://api.intra.42.fr/v2/expertises?per_page=100")
+            .header("Authorization", "Bearer $token")
+            .build()
+
+        val expertiseList: List<ExpertiseDTO> = makeRequest(request)
+
+        val sharedPreferences = context.getSharedPreferences("expertise_prefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit() {
+            putString("expertise_list", Gson().toJson(expertiseList))
+        }
     }
 
     suspend fun fetchEventsUserData(id: Int): List<EventDTO> {

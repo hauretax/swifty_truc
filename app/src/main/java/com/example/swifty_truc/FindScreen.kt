@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.swifty_truc.utils.SharedViewModel
@@ -23,6 +24,7 @@ fun FindScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     var authResponse by remember { mutableStateOf<AuthResponse?>(null) }
     val coroutineScope = rememberCoroutineScope()
     var inputText by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
 
@@ -34,7 +36,7 @@ fun FindScreen(navController: NavController, sharedViewModel: SharedViewModel) {
             Log.e("FindScreen", "Erreur lors de la récupération du todo : ${e.message}")
         } finally {
             if (authResponse != null) {
-                Log.d("MainActivity", "Token récupéré avec succès : $authResponse")
+                withContext(Dispatchers.IO) { apiService.fetchExpertiseList(context) }
             } else {
                 Log.d("MainActivity", "L'appel API a échoué, pas de réponse.")
             }

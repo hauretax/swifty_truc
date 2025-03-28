@@ -19,9 +19,17 @@ fun UserInfo(user: UserDTO) {
             text = user.login,
             style = MaterialTheme.typography.headlineLarge
         )
-        Text(
-            text = "Level: ${user.cursusUsers.firstOrNull()?.level ?: "N/A"}",
-            style = MaterialTheme.typography.bodyLarge
-        )
+        val cursus = user.cursusUsers.find { it.cursusId == 21 }
+        if (cursus?.hasCoalition == true) {
+            Text(
+                text = cursus.level.toString(),
+                style = MaterialTheme.typography.headlineLarge
+            )
+        } else {
+            Text(
+                text = "Tu n'as pas de coalition ???! ",
+                style = MaterialTheme.typography.headlineLarge
+            )
+        }
     }
 }
