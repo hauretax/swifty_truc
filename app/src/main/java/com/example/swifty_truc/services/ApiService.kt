@@ -1,6 +1,7 @@
 package com.example.swifty_truc.services
 
 import UserDTO
+import android.media.metrics.Event
 import com.google.gson.Gson
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
@@ -10,6 +11,7 @@ import android.util.Log
 import com.example.swifty_truc.dTO.AuthResponse
 import com.example.swifty_truc.dTO.EventDTO
 import com.example.swifty_truc.dTO.EventsDTO
+import com.google.gson.reflect.TypeToken
 
 class ApiService(private val client: OkHttpClient) {
 
@@ -38,22 +40,22 @@ class ApiService(private val client: OkHttpClient) {
         return t
     }
 
-    suspend fun fetchUserData(): UserDTO {
+    suspend fun fetchUserData(userName:String): UserDTO {
         val request = Request.Builder()
-            .url("https://api.intra.42.fr/v2/users/hutricot")
+            .url("https://api.intra.42.fr/v2/users/$userName")
             .header("Authorization", "Bearer $token")
             .build()
 
         return makeRequest(request)
     }
 
-    suspend fun fetchEventsUserData(): EventsDTO {
+    suspend fun fetchEventsUserData(id: Int): List<EventDTO> {
         val request = Request.Builder()
-            .url("https://api.intra.42.fr/v2/users/37164/events")
+            .url("https://api.intra.42.fr/v2/users/$id/events")
             .header("Authorization", "Bearer $token")
             .build()
 
-        return makeRequest(request)
+        return makeRequest<List<EventDTO>>(request)
     }
 
     suspend fun refreshAuthToken(refreshToken: String): AuthResponse {
@@ -72,12 +74,22 @@ class ApiService(private val client: OkHttpClient) {
     private suspend inline fun <reified T> makeRequest(request: Request): T {
         val response = client.newCall(request).execute()
         val responseBody = response.body?.string()
+
         if (responseBody != null) {
-            Log.d("response", responseBody)
+            val chunkSize = 4000  // Taille des morceaux pour le log
+            for (i in 0..responseBody.length step chunkSize) {
+                Log.d("response_raw", responseBody.substring(i, minOf(i + chunkSize, responseBody.length)))
+            }
         }
+
         if (response.isSuccessful) {
             if (responseBody != null) {
-                return Gson().fromJson(responseBody, T::class.java)
+                try {
+                    val type = object : TypeToken<T>() {}.type
+                    return Gson().fromJson(responseBody, type)
+                } catch (e: Exception) {
+                    throw Exception("Erreur de parsing : ${e.message}")
+                }
             } else {
                 throw Exception("Le corps de la réponse est vide")
             }

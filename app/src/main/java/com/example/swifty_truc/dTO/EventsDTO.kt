@@ -1,7 +1,7 @@
 package com.example.swifty_truc.dTO
 
 import com.google.gson.annotations.SerializedName
-
+import java.time.LocalDateTime
 
 typealias EventsDTO = List<EventDTO>
 
@@ -20,6 +20,6 @@ data class EventDTO(
     @SerializedName("created_at") val createdAt: String,
     @SerializedName("updated_at") val updatedAt: String,
     @SerializedName("prohibition_of_cancellation") val prohibitionOfCancellation: Int,
-    @SerializedName("waitlist") val waitlist: Any?,
+    @SerializedName("waitlist") val waitlist: Any?,  // Peut-être une liste ou un objet, garde Any? ou change selon les besoins
     @SerializedName("themes") val themes: List<String>
 )

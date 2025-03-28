@@ -8,10 +8,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.swifty_truc.dTO.EventDTO
-import com.example.swifty_truc.dTO.EventsDTO
+import androidx.navigation.NavController
+import com.example.swifty_truc.utils.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,21 +18,21 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 
 @Composable
-fun FindScreen() {
+fun FindScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     val apiService = remember { ApiService(OkHttpClient()) }
     var authResponse by remember { mutableStateOf<AuthResponse?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
+    var inputText by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
-        isLoading = true
+
+        sharedViewModel.apiService = apiService
         try {
             val rawResponse = withContext(Dispatchers.IO) { apiService.fetchAuthToken() }
             authResponse = rawResponse
         } catch (e: Exception) {
             Log.e("FindScreen", "Erreur lors de la récupération du todo : ${e.message}")
         } finally {
-            isLoading = false
             if (authResponse != null) {
                 Log.d("MainActivity", "Token récupéré avec succès : $authResponse")
             } else {
@@ -42,48 +41,49 @@ fun FindScreen() {
         }
     }
 
-    if (isLoading) {
-        CircularProgressIndicator()
-    } else {
+
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center
     ) {
+        TextField(
+            value = inputText,
+            onValueChange = { inputText = it },
+            label = { Text("Entrer un utilisateur") },
+            modifier = Modifier.fillMaxWidth()
+        )
         Button(
             onClick = {
-                fetch(coroutineScope,apiService)
+                fetch(coroutineScope, apiService, inputText, navController, sharedViewModel)
             }
         ) {
-            Text(text = "Charger un to-do")
+            Text(text = "Charger soldat !")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (isLoading) {
-            CircularProgressIndicator()
-        } else if (null != null) {
-        } else {
-            Text(text = "Clique sur le bouton pour charger un to-do.")
-        }
-    }
+
+        Text(text = "Selectionner un Utilisqteur et bim bam boum.")
+
+
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewFindScreen() {
-    FindScreen()
-}
-
-fun fetch(coroutineScope: CoroutineScope,apiService: ApiService) {
-
-
+fun fetch(
+    coroutineScope: CoroutineScope,
+    apiService: ApiService,
+    userName: String,
+    navController: NavController,
+    sharedViewModel: SharedViewModel
+) {
     coroutineScope.launch {
         try {
-            val user : UserDTO =  withContext(Dispatchers.IO) {apiService.fetchUserData()}
+            val user: UserDTO = withContext(Dispatchers.IO) { apiService.fetchUserData(userName) }
             Log.d("test", user.wallet.toString())
-            val eventsDTO=  withContext(Dispatchers.IO) {apiService.fetchEventsUserData()}
-            Log.d("events : ", eventsDTO.size.toString())
+            sharedViewModel.user = user
+            navController.navigate("show")
         } catch (e: Exception) {
             Log.e("FindScreen", "Erreur lors d un truc : ${e.message}")
         } finally {
