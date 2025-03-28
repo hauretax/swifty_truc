@@ -36,19 +36,18 @@ fun ExpertiseColumn(expertises: List<ExpertiseUser>) {
     }
     Column {
         Text(
-            text = "Expertises",
+            text = "Expertises:",
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(bottom = 10.dp)
         )
         Box(
             modifier = Modifier
                 .padding(vertical = 8.dp)
-                .border(2.dp, Color(0xFF003366))
+                .border(1.dp, Color(0xFF003366))
                 .padding(5.dp)
         ) {
             LazyColumn {
                 item {
-
                     FlowRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -72,7 +71,7 @@ fun ExpertiseColumn(expertises: List<ExpertiseUser>) {
 @Composable
 fun ExpertiseChip(name: String, value: Int) {
     Surface(
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(8.dp),
         color = Color(0xFF003366),
         modifier = Modifier.padding(4.dp)
     ) {

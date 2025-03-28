@@ -31,8 +31,8 @@ import com.example.swifty_truc.ui.component.EmailAndLocation
 import com.example.swifty_truc.ui.component.EventListColumn
 import com.example.swifty_truc.ui.component.ExpertiseColumn
 import com.example.swifty_truc.ui.component.ProfilePhoto
+import com.example.swifty_truc.ui.component.SkillsListColumn
 import com.example.swifty_truc.ui.component.UserInfo
-
 
 @Composable
 fun UserScreen(navController: NavController, sharedViewModel: SharedViewModel) {
@@ -57,7 +57,7 @@ fun UserScreen(navController: NavController, sharedViewModel: SharedViewModel) {
     ) {
         if (user != null) {
             ProfilePhoto(user.image.link)
-
+            SkillsListColumn(user)
             UserInfo(user = user)
             EmailAndLocation(user)
             val events = eventsState.value
@@ -68,18 +68,17 @@ fun UserScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                 Box(modifier = Modifier.fillMaxWidth(0.5f)) {
                     ExpertiseColumn(expertises = user.expertisesUsers)
                 }
-                Box(modifier = Modifier.fillMaxWidth(0.5f)) {
-                    if (!events.isNullOrEmpty()) {
-                        EventListColumn(events)
-                    } else {
-                        Text(
-                            text = "Aucun événement disponible.",
-                            fontSize = 16.sp,
-                            color = Color.Gray
-                        )
-                    }
+                if (!events.isNullOrEmpty()) {
+                    EventListColumn(events)
+                } else {
+                    Text(
+                        text = "Aucun événement disponible.",
+                        fontSize = 16.sp,
+                        color = Color.Gray
+                    )
                 }
             }
+
 
         } else {
             Text(text = "Erreur : données manquantes.")
@@ -92,7 +91,6 @@ fun UserScreen(navController: NavController, sharedViewModel: SharedViewModel) {
         }
     }
 }
-
 
 fun fetchEvents(
     coroutineScope: CoroutineScope,

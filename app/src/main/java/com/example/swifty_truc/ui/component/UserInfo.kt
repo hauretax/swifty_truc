@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import UserDTO
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme

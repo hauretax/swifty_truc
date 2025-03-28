@@ -57,11 +57,17 @@ data class CursusUser(
     @SerializedName("end_at") val endAt: String?,
     @SerializedName("grade") val grade: String?,
     @SerializedName("level") val level: Double,
-    @SerializedName("skills") val skills: List<Any>,
+    @SerializedName("skills") val skills: List<Skill>,
     @SerializedName("cursus_id") val cursusId: Int,
     @SerializedName("has_coalition") val hasCoalition: Boolean,
     @SerializedName("user") val user: CursusUserDetail,
     @SerializedName("cursus") val cursus: Cursus
+)
+
+data class Skill(
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("level") val level: Double,
 )
 
 data class CursusUserDetail(
