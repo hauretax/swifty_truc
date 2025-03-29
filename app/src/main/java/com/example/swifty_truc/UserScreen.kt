@@ -34,6 +34,7 @@ import com.example.swifty_truc.ui.component.ProfilePhoto
 import com.example.swifty_truc.ui.component.UserInfo
 import com.example.swifty_truc.utils.createExpertiseDisplayList
 import com.example.swifty_truc.utils.createEventDisplayList
+import com.example.swifty_truc.utils.createProjetsDisplayList
 import com.example.swifty_truc.utils.createSkillDisplayList
 
 @Composable
@@ -92,10 +93,10 @@ fun UserScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                     Text("Expertises")
                 }
                 Button(
-                    onClick = { currentTab = "events" },
+                    onClick = { currentTab = "evenement" },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Events")
+                    Text("Evenement")
                 }
                 Button(
                     onClick = { currentTab = "projets" },
@@ -107,6 +108,7 @@ fun UserScreen(navController: NavController, sharedViewModel: SharedViewModel) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
+
             val events = eventsState.value
             when (currentTab) {
                 "skills" -> BasicListDisplayer(createSkillDisplayList(user), "Skills")
@@ -114,8 +116,16 @@ fun UserScreen(navController: NavController, sharedViewModel: SharedViewModel) {
                     createExpertiseDisplayList(user.expertisesUsers),
                     "Expertise"
                 )
-                "events" -> BasicListDisplayer(createEventDisplayList(events), "Event")
-                "projets" -> Text("Bientôt projets ici", fontSize = 18.sp, color = Color.Gray)
+
+                "evenement" -> BasicListDisplayer(
+                    createEventDisplayList(events),
+                    "Evenement"
+                )
+
+                "projets" -> BasicListDisplayer(
+                    createProjetsDisplayList(user),
+                    "Projets"
+                )
             }
 
         } else {

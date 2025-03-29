@@ -21,7 +21,7 @@ fun createExpertiseDisplayList(expertises: List<ExpertiseUser>): List<DisplayEle
     val expertiseList = expertises.mapNotNull { expertise ->
         val expertiseItem = expertisesLists?.find { it.id == expertise.expertiseId }
         expertiseItem?.let {
-            DisplayElements(text = "${it.name}: ${expertise.value}", color = Color(0xffffc21c))
+            DisplayElements(text = "${it.name}: ${expertise.value}", color = Color(0xffffc21c), "t as vu c est doree")
         }
     }
     return expertiseList;

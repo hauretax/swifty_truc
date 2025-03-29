@@ -27,15 +27,8 @@ class ApiService(private val client: OkHttpClient) {
 
     suspend fun fetchAuthToken(): AuthResponse {
 
-        Log.d("existe", "mine tutrtle say hello")
-
-
         val clientId = BuildConfig.CLIENT_ID
         val clientSecret = BuildConfig.CLIENT_SECRET
-
-        Log.d("client_id", "mine tutrtle say hello")
-        Log.d("API_KEY", "Clé API : $clientId")
-        Log.d("BASE_URL", "Base URL : $clientSecret")
 
         val credentials = "$clientId:$clientSecret"
         val encodedCredentials = Base64.encodeToString(credentials.toByteArray(), Base64.NO_WRAP)

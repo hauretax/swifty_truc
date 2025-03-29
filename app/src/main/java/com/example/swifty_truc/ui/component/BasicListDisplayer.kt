@@ -18,7 +18,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
 
-data class DisplayElements(val text: String, val color: Color? = null)
+data class DisplayElements(val text: String, val color: Color? = null, val description:String?)
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -28,10 +28,13 @@ fun BasicListDisplayer(elements: List<DisplayElements>, title: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "title",
+            text = title,
             fontSize = 18.sp, color = Color.Gray
         )
-
+        Text(
+            text = elements[0].description ?: "", //je sait je cree 10 fois la meme description ... je voulais juste tester un visuelle je lest trouver joli il reste deso les perfes
+            fontSize = 15.sp, color = Color.Gray
+        )
         LazyColumn {
             item {
                 FlowRow(
