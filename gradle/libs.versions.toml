@@ -2,6 +2,7 @@
 agp = "8.9.0"
 coilCompose = "2.3.0"
 converterGson = "2.9.0"
+dotenvKotlin = "6.2.2"
 foundation = "1.7.8"
 kotlin = "2.0.21"
 coreKtx = "1.10.1"
@@ -27,6 +28,7 @@ androidx-lifecycle-runtime-ktx-v231 = { module = "androidx.lifecycle:lifecycle-r
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+dotenv-kotlin = { module = "io.github.cdimascio:dotenv-kotlin", version.ref = "dotenvKotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -51,4 +53,3 @@ ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-

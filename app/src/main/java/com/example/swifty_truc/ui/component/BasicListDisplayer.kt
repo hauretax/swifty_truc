@@ -12,23 +12,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.sp
 
 data class DisplayElements(val text: String, val color: Color? = null)
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun BasicListDisplayer(elements: List<DisplayElements>) {
-    val context = LocalContext.current
+fun BasicListDisplayer(elements: List<DisplayElements>, title: String) {
 
-    Column {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
-            text = "Expertises:",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(bottom = 10.dp)
+            text = "title",
+            fontSize = 18.sp, color = Color.Gray
         )
 
         LazyColumn {

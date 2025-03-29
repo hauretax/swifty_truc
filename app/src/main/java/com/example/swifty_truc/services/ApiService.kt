@@ -2,7 +2,7 @@ package com.example.swifty_truc.services
 
 import UserDTO
 import android.content.Context
-import android.media.metrics.Event
+
 import com.google.gson.Gson
 import okhttp3.FormBody
 import okhttp3.OkHttpClient
@@ -15,15 +15,27 @@ import com.example.swifty_truc.dTO.EventsDTO
 import com.example.swifty_truc.dTO.ExpertiseDTO
 import com.google.gson.reflect.TypeToken
 import androidx.core.content.edit
+import com.example.swifty_truc.BuildConfig
+import io.github.cdimascio.dotenv.Dotenv
+import java.io.FileInputStream
+import java.util.Properties
+
 
 class ApiService(private val client: OkHttpClient) {
 
     private var token: String = ""
 
     suspend fun fetchAuthToken(): AuthResponse {
-        val clientId = "u-s4t2ud-fc28b4a661a126ce7936bc7147395db5a2038f184c771450a417ee8c256e2094"
-        val clientSecret =
-            "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"
+
+        Log.d("existe", "mine tutrtle say hello")
+
+
+        val clientId = BuildConfig.CLIENT_ID
+        val clientSecret = BuildConfig.CLIENT_SECRET
+
+        Log.d("client_id", "mine tutrtle say hello")
+        Log.d("API_KEY", "Clé API : $clientId")
+        Log.d("BASE_URL", "Base URL : $clientSecret")
 
         val credentials = "$clientId:$clientSecret"
         val encodedCredentials = Base64.encodeToString(credentials.toByteArray(), Base64.NO_WRAP)

@@ -3,14 +3,11 @@ package com.example.swifty_truc
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +19,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,11 +30,11 @@ import kotlinx.coroutines.Dispatchers
 import com.example.swifty_truc.services.ApiService
 import com.example.swifty_truc.ui.component.BasicListDisplayer
 import com.example.swifty_truc.ui.component.EmailAndLocation
-import com.example.swifty_truc.ui.component.EventListColumn
 import com.example.swifty_truc.ui.component.ProfilePhoto
-import com.example.swifty_truc.ui.component.SkillsListColumn
 import com.example.swifty_truc.ui.component.UserInfo
-import com.example.swifty_truc.ui.component.createExpertiseList
+import com.example.swifty_truc.utils.createExpertiseDisplayList
+import com.example.swifty_truc.utils.createEventDisplayList
+import com.example.swifty_truc.utils.createSkillDisplayList
 
 @Composable
 fun UserScreen(navController: NavController, sharedViewModel: SharedViewModel) {
@@ -113,14 +109,12 @@ fun UserScreen(navController: NavController, sharedViewModel: SharedViewModel) {
 
             val events = eventsState.value
             when (currentTab) {
-                "skills" -> SkillsListColumn(user)
-                "expertises" -> BasicListDisplayer(createExpertiseList(expertises = user.expertisesUsers))
-                "events" -> if (!events.isNullOrEmpty()) {
-                    EventListColumn(events)
-                } else {
-                    Text("pas devenement trouver")
-                }
-
+                "skills" -> BasicListDisplayer(createSkillDisplayList(user), "Skills")
+                "expertises" -> BasicListDisplayer(
+                    createExpertiseDisplayList(user.expertisesUsers),
+                    "Expertise"
+                )
+                "events" -> BasicListDisplayer(createEventDisplayList(events), "Event")
                 "projets" -> Text("Bientôt projets ici", fontSize = 18.sp, color = Color.Gray)
             }
 

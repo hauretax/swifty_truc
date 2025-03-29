@@ -1,4 +1,4 @@
-package com.example.swifty_truc.ui.component
+package com.example.swifty_truc.utils
 
 import androidx.compose.runtime.*
 import ExpertiseUser
@@ -7,11 +7,12 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.swifty_truc.dTO.ExpertiseDTO
+import com.example.swifty_truc.ui.component.DisplayElements
 import com.google.gson.Gson
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun createExpertiseList(expertises: List<ExpertiseUser>): List<DisplayElements> {
+fun createExpertiseDisplayList(expertises: List<ExpertiseUser>): List<DisplayElements> {
     val context = LocalContext.current
     var expertisesLists by remember { mutableStateOf<List<ExpertiseDTO>?>(null) }
 

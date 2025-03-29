@@ -25,7 +25,7 @@ data class UserDTO(
     @SerializedName("active?") val active: Boolean,
     @SerializedName("groups") val groups: List<Any>,
     @SerializedName("cursus_users") val cursusUsers: List<CursusUser>,
-    @SerializedName("projects_users") val projectsUsers: List<Any>,
+    @SerializedName("projects_users") val projectsUsers: List<ProjectUser>,
     @SerializedName("languages_users") val languagesUsers: List<LanguageUser>,
     @SerializedName("achievements") val achievements: List<Any>,
     @SerializedName("titles") val titles: List<Any>,
@@ -37,6 +37,29 @@ data class UserDTO(
     @SerializedName("roles") val roles: List<Any>,
     @SerializedName("campus") val campus: List<Campus>,
     @SerializedName("campus_users") val campusUsers: List<CampusUser>
+)
+
+data class ProjectUser(
+    @SerializedName("id") val id: Int,
+    @SerializedName("occurrence") val occurrence: Int,
+    @SerializedName("final_mark") val finalMark: Int?,
+    @SerializedName("status") val status: String,
+    @SerializedName("validated?") val validated: Boolean?,
+    @SerializedName("current_team_id") val currentTeamId: Int?,
+    @SerializedName("project") val project: Project,
+    @SerializedName("cursus_ids") val cursusIds: List<Int>,
+    @SerializedName("marked_at") val markedAt: String?,
+    @SerializedName("marked") val marked: Boolean,
+    @SerializedName("retriable_at") val retriableAt: String?,
+    @SerializedName("created_at") val createdAt: String,
+    @SerializedName("updated_at") val updatedAt: String
+)
+
+data class Project(
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("slug") val slug: String,
+    @SerializedName("parent_id") val parentId: Int?
 )
 
 data class Image(

@@ -27,7 +27,6 @@ fun SkillsListColumn(user: UserDTO) {
                 modifier = Modifier.padding(bottom = 10.dp)
             )
 
-
             LazyColumn {
                 item {
                     FlowRow(
@@ -39,7 +38,6 @@ fun SkillsListColumn(user: UserDTO) {
                             skillChip(skill.name, skill.level)
                         }
                     }
-
                 }
             }
         }
