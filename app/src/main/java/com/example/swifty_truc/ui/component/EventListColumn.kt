@@ -20,11 +20,7 @@ fun EventListColumn(eventList: List<EventDTO>) {
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(bottom = 10.dp)
         )
-        Box(
-            modifier = Modifier
-                .border(1.dp, Color(0xFF003366))
-                .padding(3.dp)
-        ) {
+
 
             LazyColumn {
                 items(eventList) { event ->
@@ -38,9 +34,9 @@ fun EventListColumn(eventList: List<EventDTO>) {
                             color = Color.White,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(4.dp)
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
                         )
-                    }
+
                 }
 
             }
