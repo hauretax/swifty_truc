@@ -103,30 +103,40 @@ class ApiService(private val client: OkHttpClient) {
     }
 
     private suspend inline fun <reified T> makeRequest(request: Request): T {
-        if (isTokenExpired() && !isRefreshing) {
-            Log.d("correction", "Yes we fetch a new one ")
-            isRefreshing = true
-            fetchAuthToken()
-            isRefreshing = false
-        }
-        Log.d("correction", "no keep going")
+        var firstTry = true
+        var response: okhttp3.Response
+        var responseBody: String? = null
 
-        val response = client.newCall(request).execute()
-        val responseBody = response.body?.string()
+        while (true) {
+            if (isTokenExpired() && !isRefreshing) {
+                Log.d("correction", "Yes we fetch a new one ")
+                isRefreshing = true
+                fetchAuthToken()
+                isRefreshing = false
+            }
 
-        if (response.isSuccessful) {
-            if (responseBody != null) {
-                try {
-                    val type = object : TypeToken<T>() {}.type
-                    return Gson().fromJson(responseBody, type)
-                } catch (e: Exception) {
-                    throw Exception("Erreur de parsing : ${e.message}")
+            response = client.newCall(request).execute()
+            responseBody = response.body?.string()
+
+            if (response.isSuccessful) {
+                if (responseBody != null) {
+                    try {
+                        val type = object : TypeToken<T>() {}.type
+                        return Gson().fromJson(responseBody, type)
+                    } catch (e: Exception) {
+                        throw Exception("Erreur de parsing : ${e.message}")
+                    }
+                } else {
+                    throw Exception("Le corps de la réponse est vide")
                 }
             } else {
-                throw Exception("Le corps de la réponse est vide")
+                if (firstTry && response.code == 401) {
+                    Log.d("correction", "Timing serrer mon pote")
+                    firstTry = false
+                } else {
+                    throw Exception("Erreur lors de la requête API : ${response.code}")
+                }
             }
-        } else {
-            throw Exception("Erreur lors de la requête API : ${response.code}")
         }
     }
 }
