@@ -4,10 +4,10 @@ import UserDTO
 import com.example.swifty_truc.ui.component.DisplayElements
 
 fun createSkillDisplayList(user: UserDTO): List<DisplayElements> {
-    val cursus = user.cursusUsers.find { it.cursusId == 21 }
+    val cursus = if (user.cursusUsers.isNotEmpty()) user.cursusUsers.last() else null
 
 
-    if (cursus?.hasCoalition == true) {
+    if (cursus != null) {
         var skills = cursus.skills
         val averageSkill = skills.map {
             it.level

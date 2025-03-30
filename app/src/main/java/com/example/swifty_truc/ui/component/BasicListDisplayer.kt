@@ -18,7 +18,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.sp
 
-data class DisplayElements(val text: String, val color: Color? = null, val description:String?)
+data class DisplayElements(val text: String, val color: Color? = null, val description: String?)
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -32,7 +32,8 @@ fun BasicListDisplayer(elements: List<DisplayElements>, title: String) {
             fontSize = 18.sp, color = Color.Gray
         )
         Text(
-            text = elements[0].description ?: "", //je sait je cree 10 fois la meme description ... je voulais juste tester un visuelle je lest trouver joli il reste deso les perfes
+            text = elements[0].description
+                ?: "", //je sait je cree 10 fois la meme description ... je voulais juste tester un visuelle je lest trouver joli il reste deso les perfes
             fontSize = 15.sp, color = Color.Gray
         )
         LazyColumn {
@@ -43,20 +44,22 @@ fun BasicListDisplayer(elements: List<DisplayElements>, title: String) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     elements.forEach { element ->
-                        Surface(
-                            shape = RoundedCornerShape(8.dp),
-                            color =  element.color ?: Color(0xFF003366),
-                            modifier = Modifier.padding(4.dp)
-                        ) {
+                        if (element.text != "") {
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = element.color ?: Color(0xFF003366),
+                                modifier = Modifier.padding(4.dp)
+                            ) {
 
-                            Text(
-                                modifier = Modifier
-                                    .padding(horizontal = 12.dp, vertical = 6.dp),
-                                text = element.text,
-                                color = Color.White,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
+                                Text(
+                                    modifier = Modifier
+                                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                                    text = element.text,
+                                    color = Color.White,
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
 
+                            }
                         }
                     }
 

@@ -20,16 +20,16 @@ fun UserInfo(user: UserDTO) {
             text = user.login,
             style = MaterialTheme.typography.headlineLarge
         )
-        val cursus = user.cursusUsers.find { it.cursusId == 21 }
-        if (cursus?.hasCoalition == true) {
+        val cursus = if (user.cursusUsers.isNotEmpty()) user.cursusUsers.last() else null
+        if (cursus != null) {
             Text(
                 text = cursus.level.toString(),
                 style = MaterialTheme.typography.headlineLarge
             )
         } else {
             Text(
-                text = "Tu n'as pas de coalition ???! ",
-                style = MaterialTheme.typography.headlineLarge
+                text = "tu n'as pas de cursus ",
+                style = MaterialTheme.typography.headlineSmall
             )
         }
     }

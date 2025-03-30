@@ -12,7 +12,12 @@ import com.google.gson.Gson
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun createExpertiseDisplayList(expertises: List<ExpertiseUser>): List<DisplayElements> {
+fun createExpertiseDisplayList(expertises: List<ExpertiseUser>?): List<DisplayElements> {
+
+   if(expertises.isNullOrEmpty()){
+       return listOf(DisplayElements(text = "",null, "pas d'expertise trouver"))
+   }
+
     val context = LocalContext.current
     var expertisesLists by remember { mutableStateOf<List<ExpertiseDTO>?>(null) }
 
