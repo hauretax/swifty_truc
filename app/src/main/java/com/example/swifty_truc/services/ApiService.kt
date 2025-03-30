@@ -11,19 +11,17 @@ import android.util.Base64
 import android.util.Log
 import com.example.swifty_truc.dTO.AuthResponse
 import com.example.swifty_truc.dTO.EventDTO
-import com.example.swifty_truc.dTO.EventsDTO
 import com.example.swifty_truc.dTO.ExpertiseDTO
 import com.google.gson.reflect.TypeToken
 import androidx.core.content.edit
 import com.example.swifty_truc.BuildConfig
-import io.github.cdimascio.dotenv.Dotenv
-import java.io.FileInputStream
-import java.util.Properties
 
 
 class ApiService(private val client: OkHttpClient) {
 
     private var token: String = ""
+    private var tokenExpirationTime: Long = 0
+    private var isRefreshing: Boolean = false
 
     suspend fun fetchAuthToken(): AuthResponse {
 
@@ -42,10 +40,18 @@ class ApiService(private val client: OkHttpClient) {
             .post(requestBody)
             .addHeader("Authorization", "Basic $encodedCredentials")
             .build()
-        val t: AuthResponse = makeRequest(request)
-        token = t.accessToken
+        val authResponse: AuthResponse = makeRequest(request)
+        token = authResponse.accessToken
 
-        return t
+        val expiresIn = authResponse.expiresIn.toLong() * 1000L
+//        val expiresIn = 60 * 1000L
+        tokenExpirationTime = System.currentTimeMillis() + expiresIn
+        return authResponse
+    }
+
+    private fun isTokenExpired(): Boolean {
+        Log.d("correction", "token is expired ? ")
+        return System.currentTimeMillis() >= tokenExpirationTime
     }
 
     suspend fun fetchUserData(userName:String): UserDTO {
@@ -97,6 +103,14 @@ class ApiService(private val client: OkHttpClient) {
     }
 
     private suspend inline fun <reified T> makeRequest(request: Request): T {
+        if (isTokenExpired() && !isRefreshing) {
+            Log.d("correction", "Yes we fetch a new one ")
+            isRefreshing = true
+            fetchAuthToken()
+            isRefreshing = false
+        }
+        Log.d("correction", "no keep going")
+
         val response = client.newCall(request).execute()
         val responseBody = response.body?.string()
 
